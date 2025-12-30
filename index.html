@@ -3,45 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <title>For You</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
-      background: #111;
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
     }
-    .box {
-      background: #fff;
-      padding: 30px;
-      border-radius: 14px;
+
+    .container {
+      background: white;
+      padding: 35px;
       max-width: 420px;
+      border-radius: 20px;
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,.4);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      animation: fadeIn 1.2s ease forwards;
     }
-    h1 { color: #e74c3c; }
-    p { color: #333; line-height: 1.6; }
+
+    h1 {
+      color: #e75480;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #444;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.6s ease;
+    }
+
+    p.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #e75480;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #d8436a;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 18px;
+      color: rgba(231,84,128,0.7);
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh); opacity: 0; }
+      to { transform: translateY(-10vh); opacity: 1; }
+    }
   </style>
 </head>
+
 <body>
-  <div class="box">
+
+  <div class="container">
     <h1>I’m Sorry</h1>
-    <p>
-      I hurt you, and I take full responsibility for it.
-      You didn’t deserve that.
+
+    <p id="line1">
+      I hurt you, and I take full responsibility for that.
     </p>
-    <p>
-      I’m not asking for forgiveness —
-      I just wanted you to know that I truly regret my mistake.
+
+    <p id="line2">
+      There’s no excuse — I should have done better.
     </p>
-    <p>
-      Whenever you’re ready, I’m here.
+
+    <p id="line3">
+      You matter to me more than my pride or being right.
     </p>
-    ❤️
+
+    <p id="line4">
+      I don’t expect anything from you.  
+      I just wanted you to know I truly regret it.
+    </p>
+
+    <button onclick="reveal()">Click when ready</button>
   </div>
+
+  <script>
+    let index = 1;
+
+    function reveal() {
+      const line = document.getElementById("line" + index);
+      if (line) {
+        line.classList.add("show");
+        index++;
+      }
+    }
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
+    }
+
+    setInterval(createHeart, 800);
+  </script>
+
 </body>
 </html>
-
