@@ -15,6 +15,7 @@
       align-items: center;
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
+      transition: background 1s ease;
     }
 
     .container {
@@ -46,8 +47,8 @@
     }
 
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
+      margin-top: 22px;
+      padding: 10px 22px;
       border: none;
       border-radius: 20px;
       background: #e75480;
@@ -65,8 +66,17 @@
     .heart {
       position: absolute;
       font-size: 18px;
-      color: rgba(231,84,128,0.7);
       animation: floatUp 6s linear infinite;
+    }
+
+    .celebrate {
+      color: white;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .celebrate h1 {
+      font-size: 36px;
     }
 
     @keyframes fadeIn {
@@ -83,37 +93,48 @@
 
 <body>
 
-  <div class="container">
+  <div class="container" id="mainBox">
     <h1>I’m Sorry</h1>
 
-    <p id="line1">
-      I am so sorry aarruu.
-    </p>
-
-    <p id="line2">
-      My cutuuuu no your 
-    </p>
-
-    <p id="line3">
-      My phoool jaddiii nooo.Hehe
-    </p>
-
+    <p id="line1">I hurt you, and I take full responsibility for that.</p>
+    <p id="line2">There’s no excuse — I should have done better.</p>
+    <p id="line3">You matter to me more than my pride or being right.</p>
     <p id="line4">
-     Mt cute baby tamatar your, I am literally imagining you as tamatar
+      I don’t expect anything from you.  
+      I just wanted you to know I truly regret it.
     </p>
 
-    <button onclick="reveal()">Click to read more</button>
+    <button id="actionBtn" onclick="handleClick()">Click to read more</button>
   </div>
 
   <script>
     let index = 1;
 
-    function reveal() {
-      const line = document.getElementById("line" + index);
-      if (line) {
-        line.classList.add("show");
+    function handleClick() {
+      if (index <= 4) {
+        document.getElementById("line" + index).classList.add("show");
         index++;
+
+        if (index === 5) {
+          document.getElementById("actionBtn").innerText =
+            "If you have forgiven, proceed";
+        }
+      } else {
+        celebrate();
       }
+    }
+
+    function celebrate() {
+      document.body.style.background =
+        "linear-gradient(135deg, #43cea2, #185a9d)";
+
+      document.getElementById("mainBox").innerHTML = `
+        <div class="celebrate">
+          <h1>Yayyyy 🎉</h1>
+          <p>You forgave ❤️</p>
+          <p>That means more to me than you know.</p>
+        </div>
+      `;
     }
 
     function createHeart() {
@@ -121,15 +142,14 @@
       heart.className = "heart";
       heart.innerText = "❤️";
       heart.style.left = Math.random() * 100 + "vw";
+      heart.style.color = "rgba(255,255,255,0.8)";
       heart.style.animationDuration = (4 + Math.random() * 3) + "s";
       document.body.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 7000);
+      setTimeout(() => heart.remove(), 7000);
     }
 
-    setInterval(createHeart, 800);
+    setInterval(createHeart, 700);
   </script>
 
 </body>
