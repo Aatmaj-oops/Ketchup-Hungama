@@ -124,18 +124,25 @@
       }
     }
 
-    function celebrate() {
-      document.body.style.background =
-        "linear-gradient(135deg, #43cea2, #185a9d)";
+   <script>
+  function celebrate() {
+    document.body.style.background =
+      "linear-gradient(135deg, #43cea2, #185a9d)";
 
-      document.getElementById("mainBox").innerHTML = `
-        <div class="celebrate">
-          <h1>Yayyyy 🎉</h1>
-          <p>You forgave ❤️</p>
-          <p>That means more to me than you know.</p>
-        </div>
-      `;
-    }
+    document.getElementById("mainBox").innerHTML = `
+      <div class="celebrate">
+        <h1>Yayyyy 🎉</h1>
+        <p style="font-size:18px; margin-top:10px;">
+          You forgave ❤️
+        </p>
+        <p style="font-size:14px; opacity:0.9;">
+          That means more to me than you know.
+        </p>
+      </div>
+    `;
+  }
+</script>
+
 
     function createHeart() {
       const heart = document.createElement("div");
