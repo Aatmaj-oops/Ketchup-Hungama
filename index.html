@@ -79,6 +79,10 @@
       font-size: 36px;
     }
 
+    .celebrate p {
+      color: white;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -124,25 +128,22 @@
       }
     }
 
-   <script>
-  function celebrate() {
-    document.body.style.background =
-      "linear-gradient(135deg, #43cea2, #185a9d)";
+    function celebrate() {
+      document.body.style.background =
+        "linear-gradient(135deg, #43cea2, #185a9d)";
 
-    document.getElementById("mainBox").innerHTML = `
-      <div class="celebrate">
-        <h1>Yayyyy 🎉</h1>
-        <p style="font-size:18px; margin-top:10px;">
-          You forgave ❤️
-        </p>
-        <p style="font-size:14px; opacity:0.9;">
-          That means more to me than you know.
-        </p>
-      </div>
-    `;
-  }
-</script>
-
+      document.getElementById("mainBox").innerHTML = `
+        <div class="celebrate">
+          <h1>Yayyyy 🎉</h1>
+          <p style="font-size:18px; margin-top:10px;">
+            You forgave ❤️
+          </p>
+          <p style="font-size:14px; opacity:0.9;">
+            That means more to me than you know.
+          </p>
+        </div>
+      `;
+    }
 
     function createHeart() {
       const heart = document.createElement("div");
