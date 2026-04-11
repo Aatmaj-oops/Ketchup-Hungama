@@ -1,111 +1,291 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sorry cutu 😘</title>
+<title>Flower Proposal</title>
 
 <style>
+
 body{
-    margin:0;
-    overflow:hidden;
-    background:white;
-    font-family:Arial, sans-serif;
+margin:0;
+height:100vh;
+overflow:hidden;
+font-family:Arial, sans-serif;
+background:linear-gradient(#ffe6f0,#fff);
 }
 
-/* flower style */
+/* floating emoji flowers */
 .flower{
-    position:absolute;
-    user-select:none;
-    pointer-events:none;
-    animation: fade 2s linear forwards;
+position:absolute;
+font-size:65px;
+opacity:0;
+animation:fadeOut 3s linear forwards;
+pointer-events:none;
 }
 
-/* fade animation */
-@keyframes fade{
-    0%{opacity:0; transform:scale(0.5);}
-    20%{opacity:1;}
-    80%{opacity:1;}
-    100%{opacity:0; transform:scale(1.4);}
+@keyframes fadeOut{
+0%{
+opacity:0;
+transform:scale(0.4);
 }
 
-/* moving sorry text */
-#sorry{
-    position:absolute;
-    font-size:55px;
-    font-weight:bold;
-    color:#ff2e63;
-    text-shadow:0 0 10px pink, 0 0 20px #ff9aa2;
+40%{
+opacity:1;
 }
+
+100%{
+opacity:0;
+transform:scale(1.5);
+}
+}
+
+/* center card */
+.container{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+padding:35px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 0 25px rgba(0,0,0,0.2);
+z-index:5;
+}
+
+/* buttons */
+button{
+padding:12px 24px;
+margin:12px;
+border:none;
+border-radius:10px;
+font-size:18px;
+cursor:pointer;
+transition:0.3s;
+}
+
+#yesBtn{
+background:#ff4d88;
+color:white;
+}
+
+#noBtn{
+background:#e0e0e0;
+}
+
+/* bouquet image */
+#bouquet{
+
+position:absolute;
+
+top:50%;
+
+left:50%;
+
+transform:translate(-50%,-50%) scale(0.05);
+
+opacity:0;
+
+width:450px;
+
+z-index:10;
+
+}
+
+/* zoom animation */
+.showBouquet{
+
+animation:zoomForward 3s forwards;
+
+}
+
+@keyframes zoomForward{
+
+0%{
+transform:translate(-50%,-50%) scale(0.05);
+opacity:0;
+}
+
+60%{
+opacity:1;
+}
+
+100%{
+transform:translate(-50%,-50%) scale(2);
+opacity:1;
+}
+
+}
+
 </style>
 
 </head>
 
+
 <body>
 
-<div id="sorry">sorry cutu 😘</div>
+
+
+<div class="container" id="questionBox">
+
+<h2>Will you accept my flower?🥺</h2>
+
+<button id="yesBtn">Yes 💖</button>
+
+<button id="noBtn">No 🙈</button>
+
+</div>
+
+
+
+<!-- single bouquet -->
+<!-- final big bouquet -->
+<img
+id="bouquet"
+src="https://perfectgiftadda.com/wp-content/uploads/2024/02/IMG_3099-scaled.jpeg">
+
 
 <script>
 
-const flowers = ["🌻","🌹","🌷","🌼","🌺","💐","🌸","🏵️"];
+
+
+/* emoji flowers */
+
+const flowerList = [
+
+"🌸","🌺","🌷","🌻","🌹","💮","🌼"
+
+];
+
+
+
+let flowerInterval;
+
+
 
 function createFlower(){
 
-    let flower = document.createElement("div");
-    flower.className="flower";
+let flower = document.createElement("div");
 
-    flower.innerHTML = flowers[Math.floor(Math.random()*flowers.length)];
+flower.className="flower";
 
-    flower.style.left = Math.random()*window.innerWidth+"px";
-    flower.style.top = Math.random()*window.innerHeight+"px";
 
-    flower.style.fontSize = (20 + Math.random()*60)+"px";
 
-    document.body.appendChild(flower);
+flower.innerHTML =
+flowerList[Math.floor(Math.random()*flowerList.length)];
 
-    // remove after animation ends
-    setTimeout(()=>{
-        flower.remove();
-    },2000);
+
+
+flower.style.left =
+Math.random()*100 + "vw";
+
+
+
+flower.style.top =
+Math.random()*100 + "vh";
+
+
+
+document.body.appendChild(flower);
+
+
+
+setTimeout(()=>{
+flower.remove();
+},3000);
+
 }
 
-// continuously create flowers
-setInterval(()=>{
-    for(let i=0;i<8;i++){
-        createFlower();
-    }
-},120);
 
 
-// moving sorry text
-let x=100;
-let y=100;
-let dx=2.5;
-let dy=2;
+/* start flowers */
 
-const sorry=document.getElementById("sorry");
+flowerInterval =
+setInterval(createFlower,100);
 
-function moveSorry(){
 
-    x+=dx;
-    y+=dy;
 
-    if(x+260>window.innerWidth || x<0){
-        dx=-dx;
-    }
 
-    if(y+80>window.innerHeight || y<0){
-        dy=-dy;
-    }
 
-    sorry.style.left=x+"px";
-    sorry.style.top=y+"px";
+/* button grow logic */
 
-    requestAnimationFrame(moveSorry);
+let noCount=0;
+
+let yesFontSize=18;
+
+
+
+document.getElementById("noBtn").onclick=function(){
+
+
+
+if(noCount<15){
+
+noCount++;
+
+
+
+yesFontSize += 16;
+
+
+
+document.getElementById("yesBtn").style.fontSize =
+
+yesFontSize + "px";
+
+
+
 }
 
-moveSorry();
+};
+
+
+
+
+
+/* yes click */
+
+document.getElementById("yesBtn").onclick=function(){
+
+
+
+document.getElementById("questionBox").innerHTML=
+
+"<h1>Yayy you accepted my flowers🥳</h1>";
+
+
+
+/* stop flowers */
+
+clearInterval(flowerInterval);
+
+
+
+setTimeout(()=>{
+
+
+
+document.getElementById("questionBox").style.display="none";
+
+
+
+document.getElementById("bouquet")
+
+.classList.add("showBouquet");
+
+
+
+},1500);
+
+
+
+};
+
+
 
 </script>
+
+
 
 </body>
 </html>
