@@ -2,290 +2,530 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Flower Proposal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Devaloka Sundari</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Pinyon+Script&display=swap" rel="stylesheet">
 
 <style>
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
-margin:0;
-height:100vh;
-overflow:hidden;
-font-family:Arial, sans-serif;
-background:linear-gradient(#ffe6f0,#fff);
+    height:100vh;
+    overflow:hidden;
+    background:#120707;
+    font-family:'Cormorant Garamond', serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
 }
 
-/* floating emoji flowers */
-.flower{
-position:absolute;
-font-size:65px;
-opacity:0;
-animation:fadeOut 3s linear forwards;
-pointer-events:none;
+/* cinematic background */
+
+.bg{
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at top right,
+    rgba(255,130,70,0.22),
+    transparent 30%),
+
+    radial-gradient(circle at bottom left,
+    rgba(120,20,20,0.3),
+    transparent 35%),
+
+    linear-gradient(to bottom,
+    #180909,
+    #090303);
 }
 
-@keyframes fadeOut{
-0%{
-opacity:0;
-transform:scale(0.4);
+.bg::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle,
+    transparent 35%,
+    rgba(0,0,0,0.82));
 }
 
-40%{
-opacity:1;
+/* moving warm light */
+
+.light{
+    position:absolute;
+    width:650px;
+    height:650px;
+    background:radial-gradient(circle,
+    rgba(255,140,90,0.18),
+    transparent 70%);
+    border-radius:50%;
+    filter:blur(70px);
+    top:-10%;
+    right:-10%;
+    animation:floatLight 8s ease-in-out infinite alternate;
 }
 
-100%{
-opacity:0;
-transform:scale(1.5);
-}
+@keyframes floatLight{
+    from{
+        transform:translateY(-20px) translateX(0px);
+    }
+
+    to{
+        transform:translateY(40px) translateX(-30px);
+    }
 }
 
-/* center card */
+/* particles */
+
+.particles span{
+    position:absolute;
+    width:5px;
+    height:5px;
+    background:#ff9d6c;
+    border-radius:50%;
+    opacity:0.15;
+    animation:floatParticles linear infinite;
+}
+
+@keyframes floatParticles{
+
+    from{
+        transform:translateY(100vh) scale(0.5);
+    }
+
+    to{
+        transform:translateY(-120px) scale(1.4);
+    }
+
+}
+
+/* main container */
+
 .container{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:white;
-padding:35px;
-border-radius:15px;
-text-align:center;
-box-shadow:0 0 25px rgba(0,0,0,0.2);
-z-index:5;
+
+    position:relative;
+    z-index:3;
+
+    width:90%;
+    max-width:760px;
+
+    padding:70px 50px;
+
+    background:rgba(20,8,8,0.32);
+
+    backdrop-filter:blur(14px);
+
+    border-radius:35px;
+
+    border:1px solid rgba(255,255,255,0.05);
+
+    box-shadow:
+    0 0 50px rgba(0,0,0,0.65),
+    inset 0 0 30px rgba(255,255,255,0.02);
+
+    text-align:center;
+
+    animation:fadeUp 2s ease;
 }
 
-/* buttons */
-button{
-padding:12px 24px;
-margin:12px;
-border:none;
-border-radius:10px;
-font-size:18px;
-cursor:pointer;
-transition:0.3s;
-}
+@keyframes fadeUp{
 
-#yesBtn{
-background:#ff4d88;
-color:white;
-}
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
 
-#noBtn{
-background:#e0e0e0;
-}
-
-/* bouquet image */
-#bouquet{
-
-position:absolute;
-
-top:50%;
-
-left:50%;
-
-transform:translate(-50%,-50%) scale(0.05);
-
-opacity:0;
-
-width:450px;
-
-z-index:10;
+    to{
+        opacity:1;
+        transform:translateY(0px);
+    }
 
 }
 
-/* zoom animation */
-.showBouquet{
+.small{
+    color:#c9a899;
+    letter-spacing:3px;
+    margin-bottom:25px;
+    opacity:0.7;
+    font-size:0.95rem;
+}
 
-animation:zoomForward 3s forwards;
+/* heading */
+
+h1{
+    font-size:5rem;
+    color:#f3dfd3;
+    line-height:0.9;
+    font-weight:300;
+}
+
+.script{
+    display:block;
+    font-family:'Pinyon Script', cursive;
+    color:#d9473c;
+    font-size:6rem;
+    margin-top:8px;
+}
+
+.subtitle{
+    margin-top:30px;
+    color:#f0d8ca;
+    letter-spacing:4px;
+    font-size:1.3rem;
+}
+
+/* line */
+
+.line{
+    width:180px;
+    height:1px;
+    margin:40px auto;
+    background:linear-gradient(to right,
+    transparent,
+    #d88966,
+    transparent);
+}
+
+/* quote */
+
+.quote{
+    color:#d7bcb0;
+    opacity:0.72;
+    line-height:1.9;
+    font-size:1.15rem;
+    margin-bottom:50px;
+}
+
+/* play section */
+
+.playBox{
+    position:relative;
+}
+
+/* popup */
+
+.popup{
+    position:absolute;
+
+    left:50%;
+    top:-90px;
+
+    transform:translateX(-50%);
+
+    padding:18px 28px;
+
+    background:rgba(20,8,8,0.95);
+
+    border:1px solid rgba(255,255,255,0.06);
+
+    border-radius:20px;
+
+    color:#f2ddd2;
+
+    font-size:1.1rem;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:0.5s;
+}
+
+.popup.show{
+    opacity:1;
+    top:-110px;
+}
+
+/* play button */
+
+.playBtn{
+
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    border:none;
+
+    cursor:pointer;
+
+    background:
+    radial-gradient(circle at top,
+    #ff9360,
+    #8f2c22);
+
+    color:white;
+
+    font-size:2rem;
+
+    box-shadow:
+    0 0 30px rgba(255,120,70,0.4);
+
+    transition:0.4s;
+}
+
+.playBtn:hover{
+    transform:scale(1.08);
+}
+
+/* spotify-like audio visualizer */
+
+.visualizer{
+
+    margin-top:45px;
+
+    height:70px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-end;
+
+    gap:8px;
+}
+
+.bar{
+
+    width:8px;
+
+    height:20px;
+
+    border-radius:20px;
+
+    background:linear-gradient(to top,
+    #7e221d,
+    #ffb088);
+
+    opacity:0.25;
+
+    transform-origin:bottom;
+
+    transition:0.3s;
+}
+
+/* animation active */
+
+.visualizer.active .bar{
+
+    animation:musicBars 1s infinite ease-in-out;
+    opacity:1;
+}
+
+.visualizer.active .bar:nth-child(1){animation-delay:0s;}
+.visualizer.active .bar:nth-child(2){animation-delay:0.2s;}
+.visualizer.active .bar:nth-child(3){animation-delay:0.4s;}
+.visualizer.active .bar:nth-child(4){animation-delay:0.1s;}
+.visualizer.active .bar:nth-child(5){animation-delay:0.5s;}
+.visualizer.active .bar:nth-child(6){animation-delay:0.3s;}
+.visualizer.active .bar:nth-child(7){animation-delay:0.6s;}
+.visualizer.active .bar:nth-child(8){animation-delay:0.2s;}
+.visualizer.active .bar:nth-child(9){animation-delay:0.4s;}
+
+@keyframes musicBars{
+
+    0%{
+        height:10px;
+    }
+
+    50%{
+        height:65px;
+    }
+
+    100%{
+        height:18px;
+    }
 
 }
 
-@keyframes zoomForward{
+/* footer */
 
-0%{
-transform:translate(-50%,-50%) scale(0.05);
-opacity:0;
+.footer{
+    margin-top:55px;
+    color:#c1a194;
+    letter-spacing:4px;
+    font-size:0.85rem;
+    opacity:0.55;
 }
 
-60%{
-opacity:1;
+/* hidden audio */
+
+audio{
+    display:none;
 }
 
-100%{
-transform:translate(-50%,-50%) scale(2);
-opacity:1;
-}
+/* mobile */
+
+@media(max-width:700px){
+
+    .container{
+        padding:45px 25px;
+    }
+
+    h1{
+        font-size:3.5rem;
+    }
+
+    .script{
+        font-size:4.5rem;
+    }
+
+    .subtitle{
+        font-size:1rem;
+    }
 
 }
 
 </style>
-
 </head>
-
 
 <body>
 
+<div class="bg"></div>
 
+<div class="light"></div>
 
-<div class="container" id="questionBox">
+<div class="particles"></div>
 
-<h2>Will you accept my flower?🥺</h2>
+<div class="container">
 
-<button id="yesBtn">Yes 💖</button>
+    <div class="small">
+        some moments stay forever.
+    </div>
 
-<button id="noBtn">No 🙈</button>
+    <h1>
+        My
+        <span class="script">Devaloka</span>
+        Sundari
+    </h1>
+
+    <div class="subtitle">
+        you were nice today ♥
+    </div>
+
+    <div class="line"></div>
+
+    <div class="quote">
+        There was something painfully beautiful about tonight.
+        Like warmth hiding inside silence.
+    </div>
+
+    <div class="playBox">
+
+        <div class="popup" id="popup">
+           Aww... my cutie pie wants to listen to this ? 😘😘😘
+        </div>
+
+        <button class="playBtn" id="playBtn">
+            ▶
+        </button>
+
+    </div>
+
+    <!-- visualizer -->
+
+    <div class="visualizer" id="visualizer">
+
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+
+    </div>
+
+    <div class="footer">
+        made with love
+    </div>
 
 </div>
 
-
-
-<!-- single bouquet -->
-<!-- final big bouquet -->
-<img
-id="bouquet"
-src="https://perfectgiftadda.com/wp-content/uploads/2024/02/IMG_3099-scaled.jpeg">
-
+<audio id="audio">
+    <source src="aaru.mp3" type="audio/mp3">
+</audio>
 
 <script>
 
+/* particles */
 
+const particles=document.querySelector('.particles');
 
-/* emoji flowers */
+for(let i=0;i<40;i++){
 
-const flowerList = [
+    const span=document.createElement('span');
 
-"🌸","🌺","🌷","🌻","🌹","💮","🌼"
+    span.style.left=Math.random()*100+'vw';
 
-];
+    span.style.animationDuration=
+    (Math.random()*10+8)+'s';
 
+    span.style.animationDelay=
+    Math.random()*5+'s';
 
+    span.style.opacity=Math.random()*0.25;
 
-let flowerInterval;
+    span.style.width=
+    (Math.random()*6+3)+'px';
 
+    span.style.height=
+    span.style.width;
 
-
-function createFlower(){
-
-let flower = document.createElement("div");
-
-flower.className="flower";
-
-
-
-flower.innerHTML =
-flowerList[Math.floor(Math.random()*flowerList.length)];
-
-
-
-flower.style.left =
-Math.random()*100 + "vw";
-
-
-
-flower.style.top =
-Math.random()*100 + "vh";
-
-
-
-document.body.appendChild(flower);
-
-
-
-setTimeout(()=>{
-flower.remove();
-},3000);
-
+    particles.appendChild(span);
 }
 
+/* audio interaction */
 
+const btn=document.getElementById('playBtn');
 
-/* start flowers */
+const popup=document.getElementById('popup');
 
-flowerInterval =
-setInterval(createFlower,100);
+const audio=document.getElementById('audio');
 
+const visualizer=document.getElementById('visualizer');
 
+btn.addEventListener('click',()=>{
 
+    popup.classList.add('show');
 
+    btn.style.pointerEvents='none';
 
-/* button grow logic */
+    setTimeout(()=>{
 
-let noCount=0;
+        popup.classList.remove('show');
 
-let yesFontSize=18;
+        audio.play();
 
+        visualizer.classList.add('active');
 
+        btn.innerHTML='❚❚';
 
-document.getElementById("noBtn").onclick=function(){
+        btn.style.transform='scale(0.92)';
 
+    },5000);
 
+});
 
-if(noCount<15){
+/* stop visualizer when song ends */
 
-noCount++;
+audio.addEventListener('ended',()=>{
 
+    visualizer.classList.remove('active');
 
+    btn.innerHTML='▶';
 
-yesFontSize += 16;
-
-
-
-document.getElementById("yesBtn").style.fontSize =
-
-yesFontSize + "px";
-
-
-
-}
-
-};
-
-
-
-
-
-/* yes click */
-
-document.getElementById("yesBtn").onclick=function(){
-
-
-
-document.getElementById("questionBox").innerHTML=
-
-"<h1>Yayy you accepted my flowers🥳</h1>";
-
-
-
-/* stop flowers */
-
-clearInterval(flowerInterval);
-
-
-
-setTimeout(()=>{
-
-
-
-document.getElementById("questionBox").style.display="none";
-
-
-
-document.getElementById("bouquet")
-
-.classList.add("showBouquet");
-
-
-
-},1500);
-
-
-
-};
-
-
+});
 
 </script>
-
-
 
 </body>
 </html>
