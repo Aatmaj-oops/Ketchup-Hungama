@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surprise For You ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #120c1f 0%, #2a082c 50%, #400520 100%);
+      font-family: 'Outfit', sans-serif;
+      color: #fff;
+    }
+
+    /* Full-screen Particle Canvas */
+    #particle-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Screen Wrappers */
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Landing Screen */
+    #landing-screen {
+      z-index: 20;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .love-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 182, 193, 0.15);
+      border-radius: 24px;
+      padding: 40px 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 75, 145, 0.1);
+      max-width: 450px;
+      width: 100%;
+      transform: translateY(0);
+      animation: floatCard 4s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .heart-icon {
+      font-size: 3.5rem;
+      color: #ff4b91;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(255, 75, 145, 0.6));
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      line-height: 1.4;
+      margin-bottom: 24px;
+      color: #ffe4e6;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #ff4b91, #ff6b6b);
+      border: none;
+      color: white;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 75, 145, 0.4);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 25px rgba(255, 75, 145, 0.6);
+      background: linear-gradient(90deg, #ff6b6b, #ff4b91);
+    }
+
+    /* Main Experience Screen */
+    #main-screen {
+      opacity: 0;
+    }
+
+    .webcam-container {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #ff4b91;
+      box-shadow: 0 0 30px rgba(255, 75, 145, 0.5);
+      margin-bottom: 24px;
+      background: #000;
+    }
+
+    #main-canvas {
+      width: 100%;
+      height: 100%;
+      transform: scaleX(-1); /* mirror */
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Navigation / HUD Instructions */
+    .hud-display {
+      text-align: center;
+      max-width: 500px;
+      padding: 0 20px;
+      z-index: 10;
+    }
+
+    .hud-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      color: #ffe4e6;
+    }
+
+    .hud-subtitle {
+      font-size: 0.95rem;
+      color: #fca5a5;
+      line-height: 1.4;
+      min-height: 40px;
+    }
+
+    /* Control HUD Bar */
+    .controls-bar {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 30;
+      display: flex;
+      gap: 10px;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #ffe4e6;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .control-btn:hover {
+      background: rgba(255, 75, 145, 0.2);
+      border-color: #ff4b91;
+      transform: scale(1.08);
+    }
+
+    .control-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Compliment text popup overlay */
+    /* Compliment text popup overlay */
+    #compliment-overlay {
+      position: absolute;
+      bottom: calc(50% + 180px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.8);
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255, 75, 145, 0.95), 0 2px 10px rgba(0,0,0,0.5);
+      z-index: 15;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      text-align: center;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    #compliment-overlay.active {
+      opacity: 1;
+      transform: translateX(-50%) scale(1.25);
+      animation: popWobble 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popWobble {
+      0% { transform: translateX(-50%) scale(0.4) rotate(-10deg); }
+      50% { transform: translateX(-50%) scale(1.35) rotate(5deg); }
+      75% { transform: translateX(-50%) scale(1.2) rotate(-2deg); }
+      100% { transform: translateX(-50%) scale(1.25) rotate(0deg); }
+    }
+
+    /* Video Playback Overlay */
+    #video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #video-overlay.visible {
+      opacity: 1;
+    }
+
+    #surprise-video {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      outline: none;
+    }
+
+    /* Camera Error Screen */
+    #error-screen {
+      z-index: 40;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .error-card {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .error-title {
+      font-size: 1.3rem;
+      color: #fca5a5;
+      margin-bottom: 12px;
+    }
+
+    .error-text {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Particle Overlay Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Controls Bar -->
+  <div class="controls-bar">
+    <button class="control-btn" id="sound-btn" title="Toggle Sound">
+      <svg id="sound-unmuted-icon" viewBox="0 0 24 24">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+      </svg>
+      <svg id="sound-muted-icon" class="hidden" viewBox="0 0 24 24">
+        <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+      </svg>
+    </button>
+    
+    <button class="control-btn" id="welcome-btn" title="Restart Surprise">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L5.7 18.7c-1.07-1.63-1.7-3.59-1.7-5.7 0-5.52 4.48-10 10-10zm7.76 5.74l1.46-1.46c.78 1.23 1.24 2.69 1.24 4.26 0 5.52-4.48 10-10 10v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-2.11-.63-4.07-1.7-5.7z"/>
+      </svg>
+    </button>
+
+    <button class="control-btn" id="fullscreen-btn" title="Fullscreen Mode">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Screen 1: Welcome/Landing -->
+  <div class="screen" id="landing-screen">
+    <div class="love-card">
+      <div class="heart-icon">❤️</div>
+      <h2 class="welcome-title">Hey ❤️, I have something special for you</h2>
+      <button class="btn-primary" id="start-btn">Ready To Go</button>
+    </div>
+  </div>
+
+  <!-- Screen 2: Interactive Webcam Tracking HUD -->
+  <div class="screen hidden" id="main-screen">
+    <div class="webcam-container">
+      <canvas id="main-canvas" width="320" height="320"></canvas>
+    </div>
+    
+    <div class="hud-display">
+      <h3 class="hud-title">Experience Unlocked</h3>
+      <p class="hud-subtitle" id="hud-instructions">Close your hand into a fist ✊ to reveal a hidden memory...</p>
+    </div>
+  </div>
+
+  <!-- Compliment Text Overlay -->
+  <div id="compliment-overlay"></div>
+
+  <!-- Screen 3: Video Surprise Player -->
+  <div id="video-overlay" class="hidden">
+    <video id="surprise-video" playsinline></video>
+  </div>
+
+  <!-- Screen 4: Webcam Access Error Fallback -->
+  <div class="screen hidden" id="error-screen">
+    <div class="error-card">
+      <h3 class="error-title">Webcam Permission Needed</h3>
+      <p class="error-text">Camera access is required for the surprise experience to detect gestures and faces.</p>
+      <button class="btn-primary" id="retry-btn">Retry Camera</button>
+    </div>
+  </div>
+
+  <!-- Hidden Video Element for MediaPipe frames capture -->
+  <video id="webcam-video" autoplay playsinline muted style="display: none; width: 640px; height: 480px;"></video>
+
+  <!-- External CDN Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js" crossorigin="anonymous"></script>
+
+  <!-- Core Javascript Logic -->
+  <script>
+    // -------------------------------------------------------------
+    // Global Configuration
+    // -------------------------------------------------------------
+    const videos = ['video1.mp4', 'video2.mp4', 'video3.mp4'];
+    let currentVideoIdx = 0;
+    
+    const compliments = [
+      "Ummah! 💋❤️",
+      "Ummah! 💋",
+      "ummah! 🥺💋",
+      "Ummah! 💋 Cutest person detected.",
+      "Ummah! 💋 You are adorable ❤️"
+    ];
+
+    // DOM References
+    const landingScreen = document.getElementById('landing-screen');
+    const mainScreen = document.getElementById('main-screen');
+    const errorScreen = document.getElementById('error-screen');
+    const videoOverlay = document.getElementById('video-overlay');
+    const surpriseVideo = document.getElementById('surprise-video');
+    const mainCanvas = document.getElementById('main-canvas');
+    const canvasCtx = mainCanvas.getContext('2d');
+    const particleCanvas = document.getElementById('particle-canvas');
+    const particleCtx = particleCanvas.getContext('2d');
+    const videoElement = document.getElementById('webcam-video');
+    const complimentOverlay = document.getElementById('compliment-overlay');
+    const hudInstructions = document.getElementById('hud-instructions');
+
+    // Controls DOM References
+    const soundBtn = document.getElementById('sound-btn');
+    const soundUnmutedIcon = document.getElementById('sound-unmuted-icon');
+    const soundMutedIcon = document.getElementById('sound-muted-icon');
+    const welcomeBtn = document.getElementById('welcome-btn');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+    // Web Audio State
+    let audioCtx = null;
+    let isSoundEnabled = true;
+
+    // Tracking & App States
+    let isAppRunning = false;
+    let isPlayingVideo = false;
+    let shouldRunFaceDetection = false;
+    let isFaceComplimentActive = false;
+    
+    // Gesture Debounces & Counters
+    let fistFrameCount = 0;
+    let isFistCooldown = false;
+    let activeDetectedFace = null;
+    let cameraInstance = null;
+
+    // Compliment timers
+    let complimentTimeout = null;
+
+    // -------------------------------------------------------------
+    // Procedural Audio Engine (Web Audio API)
+    // -------------------------------------------------------------
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playUnlockChime() {
+      if (!isSoundEnabled) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(330, now); // E4
+      osc.frequency.exponentialRampToValueAtTime(660, now + 0.5); // E5
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+      
+      osc.start(now);
+      osc.stop(now + 0.55);
+    }
+
+    function playChimeBell() {
+      if (!isSoundEnabled) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+      
+      // Dual resonant bell
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(523.25, now); // C5
+      osc1.frequency.exponentialRampToValueAtTime(880, now + 0.1); // A5
+      osc1.connect(gain1);
+      gain1.connect(audioCtx.destination);
+      gain1.gain.setValueAtTime(0.15, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(659.25, now + 0.05); // E5
+      osc2.frequency.exponentialRampToValueAtTime(1046.50, now + 0.15); // C6
+      osc2.connect(gain2);
+      gain2.connect(audioCtx.destination);
+      gain2.gain.setValueAtTime(0.12, now + 0.05);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+      
+      osc1.start(now);
+      osc1.stop(now + 1.2);
+      osc2.start(now + 0.05);
+      osc2.stop(now + 1.4);
+    }
+
+    // -------------------------------------------------------------
+    // 2D Canvas Particle Engine
+    // -------------------------------------------------------------
+    const particles = [];
+    
+    // Heart Path Drawer
+    function drawHeartPath(ctx, x, y, size) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x - size/2, y - size/2, x - size, y + size/6, x, y + size);
+      ctx.bezierCurveTo(x + size, y + size/6, x + size/2, y - size/2, x, y);
+      ctx.closePath();
+    }
+
+    class HeartParticle {
+      constructor(x, y, size, speedY, opacity, isBurst = false, angle = 0) {
+        this.x = x;
+        this.y = y;
+        this.size = size || (Math.random() * 14 + 8);
+        this.speedY = speedY || (Math.random() * 1.2 + 0.6);
+        this.opacity = opacity || (Math.random() * 0.4 + 0.3);
+        this.isBurst = isBurst;
+        this.angle = angle;
+        this.wobbleSpeed = Math.random() * 0.02 + 0.01;
+        this.wobbleRange = Math.random() * 1.5 + 0.5;
+        this.decay = isBurst ? (Math.random() * 0.015 + 0.01) : 0;
+        this.life = 1.0;
+      }
+
+      update() {
+        if (this.isBurst) {
+          this.x += Math.cos(this.angle) * this.speedY;
+          this.y += Math.sin(this.angle) * this.speedY - 0.4;
+          this.opacity -= this.decay;
+          this.life -= this.decay;
+        } else {
+          this.y -= this.speedY;
+          this.x += Math.sin(Date.now() * this.wobbleSpeed) * this.wobbleRange * 0.3;
+          if (this.y < -50) {
+            this.y = window.innerHeight + 50;
+            this.x = Math.random() * window.innerWidth;
+          }
+        }
+      }
+
+      draw(ctx) {
+        if (this.opacity <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = '#ff4b91';
+        ctx.fillStyle = '#ff4b91';
+        drawHeartPath(ctx, this.x, this.y, this.size);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    class SparkleParticle {
+      constructor() {
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight;
+        this.size = Math.random() * 2.5 + 1.0;
+        this.alpha = Math.random() * 0.6 + 0.2;
+        this.speed = Math.random() * 0.015 + 0.005;
+      }
+
+      update() {
+        this.alpha += Math.sin(Date.now() * this.speed) * 0.04;
+        if (this.alpha < 0.1) this.alpha = 0.1;
+        if (this.alpha > 0.8) this.alpha = 0.8;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = '#fffbeb';
+        ctx.shadowBlur = 4;
+        ctx.shadowColor = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      particles.length = 0;
+      // Background drifting hearts
+      for (let i = 0; i < 28; i++) {
+        particles.push(new HeartParticle(Math.random() * window.innerWidth, Math.random() * window.innerHeight + window.innerHeight));
+      }
+      // Sparkling background dots
+      for (let i = 0; i < 40; i++) {
+        particles.push(new SparkleParticle());
+      }
+    }
+
+    function updateParticles() {
+      particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        
+        if (p.isBurst && p.life <= 0) {
+          particles.splice(i, 1);
+        } else {
+          p.draw(particleCtx);
+        }
+      }
+    }
+
+    function resizeCanvas() {
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+    }
+
+    // -------------------------------------------------------------
+    // MediaPipe Hands & Gesture Processing
+    // -------------------------------------------------------------
+    let hands;
+
+    function initHands() {
+      hands = new Hands({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+      });
+      
+      hands.setOptions({
+        maxNumHands: 1,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.55,
+        minTrackingConfidence: 0.55
+      });
+      
+      hands.onResults(onHandResults);
+    }
+
+    function calculateHandTension(landmarks) {
+      const palmCenter = {
+        x: (landmarks[0].x + landmarks[5].x + landmarks[9].x + landmarks[13].x + landmarks[17].x) / 5,
+        y: (landmarks[0].y + landmarks[5].y + landmarks[9].y + landmarks[13].y + landmarks[17].y) / 5
+      };
+      
+      const tips = [4, 8, 12, 16, 20];
+      let sumDist = 0;
+      for (const tip of tips) {
+        const dx = landmarks[tip].x - palmCenter.x;
+        const dy = landmarks[tip].y - palmCenter.y;
+        sumDist += Math.sqrt(dx*dx + dy*dy);
+      }
+      
+      const avgDist = sumDist / 5;
+      const minDist = 0.14;
+      const maxDist = 0.31;
+      let tension = (avgDist - minDist) / (maxDist - minDist);
+      return Math.max(0, Math.min(1, tension));
+    }
+
+    function onHandResults(results) {
+      if (isPlayingVideo || !isAppRunning) return;
+
+      if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+        const landmarks = results.multiHandLandmarks[0];
+        const tension = calculateHandTension(landmarks);
+        
+        // Calculate Bounding Box Area of Hand (Proximity check)
+        let minX = 1, maxX = 0, minY = 1, maxY = 0;
+        for (const pt of landmarks) {
+          if (pt.x < minX) minX = pt.x;
+          if (pt.x > maxX) maxX = pt.x;
+          if (pt.y < minY) minY = pt.y;
+          if (pt.y > maxY) maxY = pt.y;
+        }
+        const handBoxSize = Math.max(maxX - minX, maxY - minY);
+        
+        // GESTURE 1: Closed Hand (Fist)
+        if (tension < 0.16) {
+          if (!isFistCooldown && !isPlayingVideo) {
+            fistFrameCount++;
+            if (fistFrameCount > 6) { // stable trigger
+              fistFrameCount = 0;
+              playSurpriseVideo();
+            }
+          }
+        } else {
+          fistFrameCount = 0;
+        }
+
+        // GESTURE 2: Open Palm Close To Camera
+        // tension > 0.75 (open), handBoxSize > 0.36 (close to camera)
+        if (tension > 0.75 && handBoxSize > 0.36) {
+          if (!isFaceComplimentActive && !shouldRunFaceDetection) {
+            shouldRunFaceDetection = true; // Turn on Face AI scanner
+            hudInstructions.textContent = "Locating your cute face... 🌸";
+          }
+        }
+      } else {
+        fistFrameCount = 0;
+      }
+    }
+
+    // -------------------------------------------------------------
+    // MediaPipe Face Detection
+    // -------------------------------------------------------------
+    let faceDetection;
+
+    function initFaceDetection() {
+      faceDetection = new FaceDetection({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`
+      });
+      
+      faceDetection.setOptions({
+        model: 'short',
+        minDetectionConfidence: 0.5
+      });
+      
+      faceDetection.onResults(onFaceResults);
+    }
+
+    function onFaceResults(results) {
+      if (isPlayingVideo || !isAppRunning) return;
+      
+      if (results.detections && results.detections.length > 0) {
+        const detection = results.detections[0];
+        activeDetectedFace = {
+          xMin: detection.boundingBox.xMin,
+          yMin: detection.boundingBox.yMin,
+          width: detection.boundingBox.width,
+          height: detection.boundingBox.height
+        };
+        
+        if (shouldRunFaceDetection && !isFaceComplimentActive) {
+          triggerFaceCompliment(activeDetectedFace);
+        }
+      } else {
+        activeDetectedFace = null;
+      }
+    }
+
+    function triggerFaceCompliment(face) {
+      shouldRunFaceDetection = false;
+      isFaceComplimentActive = true;
+      
+      // Select Random Compliment
+      const text = compliments[Math.floor(Math.random() * compliments.length)];
+      complimentOverlay.textContent = text;
+      
+      // Play Bell sound
+      playChimeBell();
+      
+      // Position compliment relative to screen
+      const rect = mainCanvas.getBoundingClientRect();
+      const fx = rect.left + (1.0 - (face.xMin + face.width / 2)) * rect.width;
+      const fy = rect.top + (face.yMin + face.height / 2) * rect.height;
+      
+      complimentOverlay.classList.add('active');
+      
+      // Spawn burst of floating hearts around coordinates
+      for (let i = 0; i < 16; i++) {
+        const size = Math.random() * 12 + 6;
+        const speed = Math.random() * 2.2 + 0.8;
+        const angle = Math.random() * Math.PI * 2;
+        particles.push(new HeartParticle(fx, fy, size, speed, 1.0, true, angle));
+      }
+      
+      hudInstructions.textContent = "Surprise unlocked! 💖";
+      
+      if (complimentTimeout) clearTimeout(complimentTimeout);
+      complimentTimeout = setTimeout(() => {
+        isFaceComplimentActive = false;
+        complimentOverlay.classList.remove('active');
+        activeDetectedFace = null;
+        hudInstructions.textContent = "Close your hand into a fist ✊ to reveal a hidden memory...";
+      }, 4000);
+    }
+
+    // -------------------------------------------------------------
+    // Webcam Canvas Feed Render
+    // -------------------------------------------------------------
+    function renderWebcamCanvas() {
+      if (isPlayingVideo || !isAppRunning) return;
+      
+      canvasCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+      canvasCtx.drawImage(videoElement, 0, 0, mainCanvas.width, mainCanvas.height);
+      
+      // Draw Heart Outline around face if active
+      if (isFaceComplimentActive && activeDetectedFace) {
+        const cx = (activeDetectedFace.xMin + activeDetectedFace.width / 2) * mainCanvas.width;
+        const cy = (activeDetectedFace.yMin + activeDetectedFace.height / 2) * mainCanvas.height;
+        const faceSize = Math.max(activeDetectedFace.width, activeDetectedFace.height) * mainCanvas.width;
+        
+        canvasCtx.save();
+        canvasCtx.shadowBlur = 18;
+        canvasCtx.shadowColor = '#ff4b91';
+        canvasCtx.strokeStyle = '#ff4b91';
+        canvasCtx.lineWidth = 4;
+        canvasCtx.fillStyle = 'rgba(255, 75, 145, 0.12)';
+        
+        const size = faceSize * 1.35;
+        const hy = cy - size / 3.2; // shift starting position upward to center heart around face
+        
+        drawHeartPath(canvasCtx, cx, hy, size);
+        canvasCtx.stroke();
+        canvasCtx.fill();
+        canvasCtx.restore();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // Surprise Video Player Control
+    // -------------------------------------------------------------
+    function playSurpriseVideo() {
+      isPlayingVideo = true;
+      shouldRunFaceDetection = false;
+      isFaceComplimentActive = false;
+      complimentOverlay.classList.remove('active');
+      
+      playUnlockChime();
+      
+      // Load current video
+      surpriseVideo.src = videos[currentVideoIdx];
+      surpriseVideo.load();
+      
+      // Update index for next fist triggers
+      currentVideoIdx = (currentVideoIdx + 1) % videos.length;
+      
+      // Transitions
+      mainScreen.style.opacity = 0;
+      videoOverlay.classList.remove('hidden');
+      
+      setTimeout(() => {
+        videoOverlay.classList.add('visible');
+        surpriseVideo.play().catch(err => {
+          console.warn("Autoplay block detected:", err);
+          // if blocked, wait for user touch/play
+        });
+      }, 80);
+    }
+
+    function closeSurpriseVideo() {
+      videoOverlay.classList.remove('visible');
+      mainScreen.style.opacity = 1;
+      
+      setTimeout(() => {
+        videoOverlay.classList.add('hidden');
+        surpriseVideo.src = '';
+        isPlayingVideo = false;
+        
+        // Cooldown period to prevent double trigger
+        isFistCooldown = true;
+        setTimeout(() => {
+          isFistCooldown = false;
+        }, 2500);
+        
+        hudInstructions.textContent = "Close your hand into a fist ✊ to reveal a hidden memory...";
+      }, 800);
+    }
+
+    surpriseVideo.addEventListener('ended', closeSurpriseVideo);
+    surpriseVideo.addEventListener('error', (e) => {
+      console.warn("Video file missing or failed to load. Returning to canvas.", e);
+      closeSurpriseVideo();
+    });
+
+    // -------------------------------------------------------------
+    // Camera Stream Management & Permissions
+    // -------------------------------------------------------------
+    async function startCameraAndExperience() {
+      initAudio();
+      
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        videoElement.srcObject = stream;
+        videoElement.play();
+        
+        // Start camera tracker loop
+        cameraInstance = new Camera(videoElement, {
+          onFrame: async () => {
+            if (!isPlayingVideo && isAppRunning) {
+              await hands.send({ image: videoElement });
+              if (shouldRunFaceDetection) {
+                await faceDetection.send({ image: videoElement });
+              }
+            }
+          },
+          width: 640,
+          height: 480
+        });
+        cameraInstance.start();
+        
+        // Transitions
+        landingScreen.style.opacity = 0;
+        errorScreen.classList.add('hidden');
+        
+        setTimeout(() => {
+          landingScreen.classList.add('hidden');
+          mainScreen.classList.remove('hidden');
+          mainScreen.style.opacity = 1;
+          isAppRunning = true;
+        }, 800);
+        
+      } catch (err) {
+        console.warn("Camera request rejected:", err);
+        showCameraError();
+      }
+    }
+
+    function showCameraError() {
+      landingScreen.classList.add('hidden');
+      mainScreen.classList.add('hidden');
+      errorScreen.classList.remove('hidden');
+    }
+
+    // -------------------------------------------------------------
+    // Interface HUD Control Events
+    // -------------------------------------------------------------
+    function setupHUDControls() {
+      // Start Button
+      document.getElementById('start-btn').addEventListener('click', startCameraAndExperience);
+      
+      // Retry Button
+      document.getElementById('retry-btn').addEventListener('click', startCameraAndExperience);
+
+      // Sound Toggle
+      soundBtn.addEventListener('click', () => {
+        isSoundEnabled = !isSoundEnabled;
+        if (isSoundEnabled) {
+          soundUnmutedIcon.classList.remove('hidden');
+          soundMutedIcon.classList.add('hidden');
+          initAudio();
+        } else {
+          soundUnmutedIcon.classList.add('hidden');
+          soundMutedIcon.classList.remove('hidden');
+        }
+      });
+
+      // Replay Welcome Trigger
+      welcomeBtn.addEventListener('click', () => {
+        // Reset states
+        isAppRunning = false;
+        isPlayingVideo = false;
+        shouldRunFaceDetection = false;
+        isFaceComplimentActive = false;
+        complimentOverlay.classList.remove('active');
+        
+        surpriseVideo.src = '';
+        videoOverlay.classList.add('hidden');
+        
+        // Return to landing screen
+        mainScreen.classList.add('hidden');
+        mainScreen.style.opacity = 0;
+        landingScreen.classList.remove('hidden');
+        setTimeout(() => {
+          landingScreen.style.opacity = 1;
+        }, 50);
+      });
+
+      // Fullscreen Trigger
+      fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => {
+            console.warn("Error enabling fullscreen:", err);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // Master Animation Loop
+    // -------------------------------------------------------------
+    function gameLoop() {
+      requestAnimationFrame(gameLoop);
+      
+      // 1. Particle System Updates
+      updateParticles();
+      
+      // 2. Camera Canvas Drawing
+      renderWebcamCanvas();
+    }
+
+    // Initialize Page
+    window.addEventListener('load', () => {
+      // 1. Initialise canvas dimensions
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      
+      // 2. Setup background particles
+      initParticles();
+      
+      // 3. Setup HUD buttons
+      setupHUDControls();
+      
+      // 4. Initialize tracking networks
+      initHands();
+      initFaceDetection();
+      
+      // 5. Fire loop
+      gameLoop();
+    });
+  </script>
+</body>
+</html>
